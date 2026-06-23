@@ -1,0 +1,4 @@
+assets_src_png/
+.DS_Store
+build_site.py
+*.docx
