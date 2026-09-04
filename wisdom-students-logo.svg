@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 156" role="img" aria-labelledby="title description">
+  <title id="title">Wisdom Students</title>
+  <desc id="description">Wisdom Students horizontal wordmark with a red circular T monogram</desc>
+  <g fill="#121216">
+    <text x="10" y="112" font-family="Georgia, Times New Roman, serif" font-size="108" font-weight="700" letter-spacing="-8">WISDOM</text>
+    <text x="440" y="112" font-family="Arial Black, Arial, Helvetica, sans-serif" font-size="107" font-weight="900" letter-spacing="-9">s</text>
+    <text x="594" y="112" font-family="Arial Black, Arial, Helvetica, sans-serif" font-size="107" font-weight="900" letter-spacing="-9">dents</text>
+  </g>
+  <g transform="translate(475 16)">
+    <path d="M62 0a62 62 0 1 1 0 124A62 62 0 0 1 62 0Z" fill="#f21e2b"/>
+    <path d="M31 21h62v22H74v45c0 15-10 24-24 24S26 103 26 88V43H9V21h22Z" fill="#121216"/>
+    <path d="M25 42H12a49 49 0 0 0 92 48H74c-13 0-23-10-23-23V42Z" fill="#f21e2b"/>
+  </g>
+</svg>

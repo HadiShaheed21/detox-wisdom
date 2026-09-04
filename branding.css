@@ -1,0 +1,4 @@
+.brand-logo{display:block;width:225px;height:auto;transition:transform .25s ease}
+.brand:hover .brand-logo{transform:translateY(-1px)}
+.light-brand .brand-logo{filter:invert(1) grayscale(1) brightness(2.8)}
+@media(max-width:450px){.brand-logo{width:160px;height:auto}}

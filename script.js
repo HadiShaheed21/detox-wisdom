@@ -1,155 +1,62 @@
-// ---------- mobile menu ----------
-const btn = document.querySelector('.menu-btn');
-const links = document.querySelector('.links');
-function setMenu(open){
-  links.classList.toggle('open', open);
-  btn.setAttribute('aria-expanded', open);
-}
-btn && btn.addEventListener('click', () => setMenu(!links.classList.contains('open')));
-links && links.addEventListener('click', e => { if (e.target.tagName === 'A') setMenu(false); });
-document.addEventListener('click', e => {
-  if (links.classList.contains('open') && !e.target.closest('.nav')) setMenu(false);
-});
-document.addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
-
-// ---------- language toggle (ML <-> EN) ----------
-const langToggle = document.getElementById('langToggle');
-let lang = 'ml';
-function applyLang(){
-  document.documentElement.lang = lang;
-  document.querySelectorAll('[data-ml][data-en]').forEach(el => {
-    el.textContent = el.dataset[lang];
-  });
-  langToggle.querySelectorAll('span').forEach((s, i) => {
-    s.style.color = (i === (lang === 'ml' ? 0 : 1)) ? 'var(--red)' : '';
-  });
-}
-langToggle && langToggle.addEventListener('click', () => {
-  lang = lang === 'ml' ? 'en' : 'ml';
-  applyLang();
-});
-applyLang();
-
-// ---------- detox meter ----------
-const DETOX_Q = [
-  'ഉണർന്നാൽ ആദ്യം ഫോൺ എടുക്കാറുണ്ടോ?',
-  'ദിവസം 4 മണിക്കൂറിൽ കൂടുതൽ സ്ക്രീൻ ടൈം?',
-  'ഭക്ഷണം കഴിക്കുമ്പോൾ ഫോൺ ഉപയോഗിക്കാറുണ്ടോ?',
-  'നോട്ടിഫിക്കേഷൻ ഇല്ലെങ്കിലും ഇടയ്ക്കിടെ ഫോൺ നോക്കാറുണ്ടോ?',
-  'ഉറങ്ങുന്നതിന് തൊട്ടുമുൻപ് സ്ക്രോൾ ചെയ്യാറുണ്ടോ?',
-  'ഫോൺ ഇല്ലാതെ ബോറടിക്കുന്നതായി തോന്നാറുണ്ടോ?'
+const nav=document.querySelector('.nav'),glow=document.querySelector('.cursor-glow');
+addEventListener('scroll',()=>nav.classList.toggle('compact',scrollY>45),{passive:true});
+addEventListener('pointermove',e=>{glow.style.left=e.clientX+'px';glow.style.top=e.clientY+'px'});
+document.querySelector('.theme').addEventListener('click',()=>{let on=document.body.classList.toggle('night-mode'),s=document.documentElement.style;s.setProperty('--cream',on?'#252529':'#f8f5ef');s.setProperty('--ink',on?'#f4efe6':'#18181b');s.setProperty('--line',on?'rgba(255,255,255,.14)':'rgba(24,24,27,.13)');document.querySelector('.theme').textContent=on?'☀':'◐'});
+document.querySelector('.language').addEventListener('click',e=>{const on=e.currentTarget.textContent==='മലയാളം';e.currentTarget.textContent=on?'English':'മലയാളം';document.documentElement.lang=on?'en':'ml'});
+document.querySelectorAll('.magnetic').forEach(el=>{el.addEventListener('pointermove',e=>{let r=el.getBoundingClientRect(),x=(e.clientX-r.left-r.width/2)*.12,y=(e.clientY-r.top-r.height/2)*.15;el.style.transform=`translate(${x}px,${y}px)`});el.addEventListener('pointerleave',()=>el.style.transform='')});
+const counters=document.querySelectorAll('[data-count]');let counted=false;const countUp=()=>{if(counted)return;let y=document.querySelector('.counter-row').getBoundingClientRect().top;if(y>innerHeight*.78)return;counted=true;counters.forEach(el=>{let end=+el.dataset.count,start=performance.now(),dur=1500;let tick=t=>{let n=Math.min(1,(t-start)/dur);el.textContent=Math.floor((1-Math.pow(1-n,3))*end).toLocaleString();if(n<1)requestAnimationFrame(tick)};requestAnimationFrame(tick)})};addEventListener('scroll',countUp,{passive:true});countUp();
+const questions=[
+  {tag:'YOUR RELATIONSHIP · നിങ്ങളുടെ ബന്ധം',ml:'താങ്കൾ ഒരു ഫോൺ അഡിക്റ്റ് ആണോ?',en:'Do you feel addicted to your phone?',a:[['അതെ','Yes',4],['അല്ല','No',1],['അറിയില്ല','I’m not sure',2]]},
+  {tag:'WHAT OTHERS NOTICE · മറ്റുള്ളവർ കാണുന്നത്',ml:'“24 മണിക്കൂറും ഫോണിലാണ്…” എന്ന് വീട്ടുകാരോ കൂട്ടുകാരോ പറയാറുണ്ടോ?',en:'Do family or friends say you are on your phone all day?',a:[['സ്ഥിരമായി','Always',4],['ഇടക്കൊക്കെ','Sometimes',3],['അപൂർവ്വമായി','Rarely',2],['ഇതുവരെ ആരും പറഞ്ഞിട്ടില്ല','No one has said this',1]]},
+  {tag:'DAILY CHECKS · ദിവസേനയുള്ള അൺലോക്കുകൾ',ml:'ഒരു ദിവസം എത്ര തവണ മൊബൈൽ സ്ക്രീൻ അൺലോക്ക് ചെയ്യാറുണ്ട്?',en:'How many times do you unlock your mobile screen in a day?',a:[['200-ൽ കൂടുതൽ','More than 200',4],['100–200','100–200',3],['50–100','50–100',2],['50-ൽ താഴെ','Under 50',1]]},
+  {tag:'PHANTOM PINGS · നോട്ടിഫിക്കേഷൻ തോന്നൽ',ml:'ഫോൺ റിംഗ് ചെയ്യുന്നതായോ നോട്ടിഫിക്കേഷൻ വന്നതായോ തോന്നാറുണ്ടോ?',en:'Do you sometimes feel your phone is ringing or that you received a notification?',a:[['മിക്ക സമയങ്ങളിലും','Almost always',4],['ഫ്രീ സമയങ്ങളിൽ','Mostly in free moments',3],['ഇടക്കൊക്കെ','Sometimes',2],['ഇതുവരെ ഉണ്ടായിട്ടില്ല','Never',1]]},
+  {tag:'YOUR MORNING · രാവിലെ',ml:'ഉണർന്ന് ആദ്യം ചെയ്യുന്നത് WhatsApp / Facebook / Instagram പരിശോധിക്കലാണോ?',en:'Is checking WhatsApp, Facebook, or Instagram the first thing you do after waking up?',a:[['അതെ','Yes',4],['ചിലപ്പോൾ','Sometimes',2],['അല്ല','No',1],['അറിയില്ല','I’m not sure',2]]},
+  {tag:'MEALTIME · ഭക്ഷണസമയം',ml:'ഭക്ഷണം കഴിക്കുമ്പോഴുള്ള ഫോൺ ഉപയോഗം എങ്ങനെയാണ്?',en:'How would you describe your phone use while eating?',a:[['സ്ക്രോൾ ചെയ്യാതെ ഭക്ഷണം കഴിക്കാൻ ബുദ്ധിമുട്ടാണ്','I feel something is missing without scrolling',4],['എന്തെങ്കിലും കാണാറുണ്ട്','I usually watch something',3],['ഇടക്കൊക്കെ ഉപയോഗിക്കും','Sometimes',2],['തീരെ ഉപയോഗിക്കാറില്ല','I do not use it while eating',1]]},
+  {tag:'BATHROOM HABIT · ടോയ്ലറ്റ് സമയം',ml:'ടോയ്ലറ്റിൽ പോകുമ്പോൾ ഫോൺ ഉപയോഗം എങ്ങനെയാണ്?',en:'How do you use your phone when you go to the toilet?',a:[['മിക്ക സമയങ്ങളിലും ഉപയോഗിക്കും','Almost always',4],['പ്രത്യേക സാഹചര്യങ്ങളിൽ','Only in certain situations',3],['ഇടക്കൊക്കെ','Sometimes',2],['ഫോൺ കൊണ്ടുപോകാറില്ല','I do not take it with me',1]]},
+  {tag:'YOUR NIGHT · രാത്രി',ml:'രാത്രി വൈകിയോ എല്ലാവരും ഉറങ്ങിയ ശേഷമോ ഫോൺ ഉപയോഗിക്കുന്ന ശീലമുണ്ടോ?',en:'Do you use your phone late at night or after everyone else has gone to bed?',a:[['മിക്ക ദിവസങ്ങളിലും','Most days',4],['തനിച്ചാകുന്ന ദിവസങ്ങളിൽ','When I’m alone',3],['ചിലപ്പോഴൊക്കെ','Sometimes',2],['തീരെ ഇല്ല','Never',1]]},
+  {tag:'SOCIAL FEEDBACK · പ്രതികരണങ്ങൾ',ml:'പോസ്റ്റുകൾക്കും സ്റ്റാറ്റസുകൾക്കും കിട്ടുന്ന views / likes / comments ഇടക്കിടെ ചെക്ക് ചെയ്യാറുണ്ടോ?',en:'Do you frequently check the views, likes, comments, or hearts on your posts and statuses?',a:[['അധിക സമയങ്ങളിലും','Most of the time',4],['കുറച്ചധികം സമയം','Quite often',3],['ഇടക്കൊക്കെ','Sometimes',2],['ഇല്ല','No',1]]},
+  {tag:'GAMING · ഗെയിമിംഗ്',ml:'ഫോണിൽ എത്ര ഗെയിം ആപ്പുകൾ ഉണ്ട്?',en:'How many game apps do you have on your phone?',a:[['10 അല്ലെങ്കിൽ കൂടുതൽ','10 or more',4],['5–9','5–9',3],['1–4','1–4',2],['0 — ഗെയിമുകൾ കളിക്കാറില്ല','0 — I do not play games',1]]},
+  {tag:'SLEEP · ഉറക്കം',ml:'നിരന്തരമുള്ള സ്ക്രീൻ ഉപയോഗം ഉറക്കസമയത്തെയോ sleep pattern-നെയോ ബാധിച്ചിട്ടുണ്ടോ?',en:'Has constant screen use affected your sleep time or sleep pattern?',a:[['ഉണ്ട്','Yes',4],['കുറച്ചൊക്കെ ബാധിക്കും','Somewhat',3],['അറിയില്ല','I’m not sure',2],['ഇല്ല','No',1]]},
+  {tag:'PRIVACY · സ്വകാര്യത',ml:'താങ്കളുടെ ഫോൺ മറ്റൊരാൾ പരിശോധിക്കുന്നതിൽ ഭയമുണ്ടോ?',en:'Are you afraid of someone checking your phone?',a:[['ഉണ്ട്','Yes',4],['ചെറിയ ഭയമുണ്ട്','A little',3],['എന്റെ സാന്നിധ്യത്തിൽ പ്രശ്നമില്ല','Not when I’m present',2],['ഇല്ല','No',1]]},
+  {tag:'TOGETHER TIME · ഒന്നിച്ചുള്ള സമയം',ml:'കുടുംബം സംസാരിക്കുമ്പോഴോ പങ്കാളിയോടൊപ്പമുള്ള സമയത്തോ ഫോൺ ഉപയോഗം കൂടാറുണ്ടോ?',en:'Does your phone use increase during family conversations or time with your partner?',a:[['ഉണ്ട്','Yes',4],['ഇടക്കൊക്കെ','Sometimes',3],['പ്രത്യേക സാഹചര്യങ്ങളിൽ മാത്രം','Only in special situations',2],['ഇല്ല','No',1]]},
+  {tag:'CONTROL · നിയന്ത്രണം',ml:'അമിത സ്ക്രീൻ ഉപയോഗം നിയന്ത്രിക്കാനുള്ള പരിശ്രമങ്ങൾ പരാജയപ്പെട്ടിട്ടുണ്ടോ?',en:'Have efforts to control excessive screen use failed?',a:[['പലതവണ ശ്രമിച്ചു, പൂർണ്ണമായി നിർത്താനായില്ല','I have tried many times but could not stop fully',4],['ശ്രമിച്ചു, വിജയിച്ചിട്ടില്ല','I tried but did not succeed',3],['ഇതുവരെ ശ്രമിച്ചിട്ടില്ല','I have never tried',2],['വളരെ കുറച്ചേ ഉപയോഗിക്കൂ','I use screens very little',1]]},
+  {tag:'YESTERDAY · ഇന്നലെ',ml:'ഇന്നലെ എത്ര സമയം സ്ക്രീൻ ഉപയോഗിച്ചു?',en:'How much screen time did you use yesterday?',a:[['10 മണിക്കൂറോ കൂടുതൽ','10 hours or more',4],['6–10 മണിക്കൂർ','6–10 hours',3],['3–6 മണിക്കൂർ','3–6 hours',2],['3 മണിക്കൂറിൽ താഴെ','Under 3 hours',1]]},
+  {tag:'ON THE ROAD · ഡ്രൈവിംഗ്',ml:'Driving സമയത്ത് സോഷ്യൽ മീഡിയ ഉപയോഗിക്കാറുണ്ടോ?',en:'Do you use social media while driving?',a:[['ഉണ്ട്','Yes',4],['ചില സന്ദർഭങ്ങളിൽ','Sometimes',3],['അത്യാവശ്യ ഘട്ടങ്ങളിൽ മാത്രം','Only in an emergency',2],['ഇല്ല','No',1]]}
 ];
-const OPTS = [['ഒരിക്കലും', 0], ['ചിലപ്പോൾ', 1], ['എപ്പോഴും', 2]];
-const detoxQs = document.getElementById('detoxQs');
-if (detoxQs){
-  DETOX_Q.forEach((q, i) => {
-    const li = document.createElement('li');
-    li.innerHTML = `<div class="q-text">${i + 1}. ${q}</div><div class="opts">` +
-      OPTS.map(([label, v]) =>
-        `<label><input type="radio" name="q${i}" value="${v}" ${v === 0 ? 'checked' : ''}>${label}</label>`
-      ).join('') + '</div>';
-    detoxQs.appendChild(li);
-  });
-  document.getElementById('detoxForm').addEventListener('submit', e => {
-    e.preventDefault();
-    let score = 0;
-    DETOX_Q.forEach((_, i) => {
-      const sel = document.querySelector(`input[name="q${i}"]:checked`);
-      if (sel) score += +sel.value;
-    });
-    const pct = Math.round((score / (DETOX_Q.length * 2)) * 100);
-    const box = document.getElementById('detoxResult');
-    box.hidden = false;
-    box.querySelector('.meter-fill').style.width = pct + '%';
-    const level = pct < 34 ? 'Low' : pct < 67 ? 'Moderate' : 'High';
-    box.querySelector('.detox-score').textContent = `Addiction Level: ${pct}% (${level})`;
-    box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  });
-}
+let qi=0,score=0;const content=document.getElementById('quizContent'),qno=document.getElementById('questionNo'),bar=document.getElementById('quizProgress'),steps=document.querySelectorAll('.check-steps span');
+function updateSteps(){const completed=Math.ceil((qi+1)/questions.length*steps.length);steps.forEach((step,i)=>step.classList.toggle('active',i<completed))}
+function renderQ(){let q=questions[qi],number=String(qi+1).padStart(2,'0');qno.textContent=`${number} / ${String(questions.length).padStart(2,'0')}`;bar.style.width=((qi+1)/questions.length*100)+'%';updateSteps();content.classList.remove('question-in');void content.offsetWidth;content.classList.add('question-in');content.innerHTML=`<p class="quiz-type">${q.tag}</p><h3><span lang="ml">${q.ml}</span><small>${q.en}</small></h3><div class="answers">${q.a.map(([ml,en,value])=>`<button data-answer="${value}"><span lang="ml">${ml}</span><small>${en}</small><b>→</b></button>`).join('')}</div>`;content.querySelectorAll('button').forEach(b=>b.onclick=()=>{score+=+b.dataset.answer;b.disabled=true;qi++;setTimeout(()=>qi<questions.length?renderQ():result(),180)})}
+function result(){qno.textContent='YOUR SNAPSHOT';bar.style.width='100%';steps.forEach(step=>step.classList.add('active'));let risk=Math.round((score-questions.length)/(questions.length*3)*100),isHigh=risk>=66,isMid=risk>=34,title=isHigh?'Your attention is asking for more space.':isMid?'A few small changes could make a real difference.':'You have a steady foundation to protect.',mlTitle=isHigh?'നിങ്ങളുടെ ശ്രദ്ധയ്ക്ക് കൂടുതൽ ഇടം വേണം.':isMid?'ചെറിയ മാറ്റങ്ങൾ വലിയ വ്യത്യാസം ഉണ്ടാക്കും.':'നിങ്ങൾക്ക് സംരക്ഷിക്കാവുന്ന നല്ലൊരു അടിത്തറയുണ്ട്.',tip=isHigh?'Tonight, charge your phone outside the bedroom.':isMid?'Choose one meal to keep phone-free today.':'Keep your first 15 minutes phone-free tomorrow.';content.innerHTML=`<p class="quiz-type">YOUR DIGITAL WELLBEING · നിങ്ങളുടെ ഡിജിറ്റൽ ശീലം</p><div class="snapshot"><div class="snapshot-ring" style="--p:${risk}%"><b>${risk}</b><small>risk / 100</small></div><div><h3>${title}</h3><p lang="ml">${mlTitle}</p></div></div><div class="result-tip">✦ <span>Try this today</span> ${tip}<br><small lang="ml">ഇത് ഒരു diagnosis അല്ല — നിങ്ങളുടെ ശീലങ്ങൾ ശ്രദ്ധിക്കാൻ ഒരു ചെറിയ തുടക്കമാണ്.</small></div><div class="answers result-actions"><button data-tool-link>Pick a small tool <b>↓</b></button><button data-reset>Start again ↻</button></div>`;content.querySelector('[data-reset]').onclick=()=>{qi=0;score=0;renderQ()};content.querySelector('[data-tool-link]').onclick=()=>document.querySelector('.toolkit').scrollIntoView({behavior:'smooth'})}
+document.querySelector('.quiz-close').onclick=()=>{qi=0;score=0;renderQ()};renderQ();
+document.querySelectorAll('.tool-action').forEach(button=>button.addEventListener('click',()=>{button.innerHTML='Added to today <b>✓</b>';button.closest('.tool-card').classList.add('active-tool');let toast=document.querySelector('.tool-toast');toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),3200)}));
+const resetModes={soft:{title:'A softer start.',time:'9:30 PM',task:'Keep your first 15 minutes phone-free.'},focus:{title:'Make space to think.',time:'7:00 AM',task:'Choose one 45-minute focus block.'},family:{title:'A room for us.',time:'8:00 PM',task:'Share one phone-free meal together.'}};
+document.querySelectorAll('.mode').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('.mode').forEach(b=>b.classList.remove('active'));button.classList.add('active');let mode=resetModes[button.dataset.mode];document.getElementById('modeTitle').textContent=mode.title;document.getElementById('focusTime').textContent=mode.time;document.getElementById('challengeText').textContent=mode.task}));
+document.getElementById('focusToggle').addEventListener('click',e=>{let on=e.currentTarget.classList.toggle('on');e.currentTarget.setAttribute('aria-pressed',on);e.currentTarget.querySelector('span').textContent=on?'On':'Off'});
+document.getElementById('challengeDone').addEventListener('click',e=>{e.currentTarget.innerHTML='Done today <b>✓</b>';document.getElementById('winLabel').textContent='1 / 3 complete';document.querySelector('.day.current i').textContent='✓';document.querySelector('.day.current').classList.add('done');document.getElementById('streak').textContent='02'});
 
-// ---------- dashboard tabs ----------
-document.querySelectorAll('.dash-tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    document.querySelectorAll('.dash-tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.dash-panel').forEach(p => p.classList.remove('active'));
-    tab.classList.add('active');
-    document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
-  });
-});
+const brainStates={
+  2:{hours:'2h 00m',meter:'24%',level:'STEADY',region:'focus'},
+  5:{hours:'5h 00m',meter:'56%',level:'BUILDING',region:'focus'},
+  8:{hours:'8h 00m',meter:'82%',level:'HIGH',region:'rest'}
+};
+const brainRegions={
+  focus:{icon:'⌁',tag:'ATTENTION & FOCUS',title:'Give your attention a little room.',text:'Rapid switching and constant alerts can make it harder to stay with one task.',mission:'Try 25 minutes with notifications off.'},
+  rest:{icon:'☾',tag:'REST & SLEEP',title:'Help your brain wind down.',text:'Late-night light and emotionally busy content can delay feeling sleepy.',mission:'Keep your phone away for the last 30 minutes before bed.'},
+  reward:{icon:'✦',tag:'REWARD LOOP',title:'Pause before the next refresh.',text:'Likes, messages, and novelty can make checking feel automatic.',mission:'Move one social app off your home screen.'},
+  calm:{icon:'◌',tag:'EMOTIONAL BALANCE',title:'Make space between feeling and scrolling.',text:'Fast, intense content can leave you more activated.',mission:'Take three slow breaths before opening your feed.'}
+};
+let selectedHours=5,currentRegion='focus',completedMissions=[];
+const updateQuest=()=>{const complete=completedMissions.length,score=Math.round(complete/3*100),button=document.getElementById('missionDone'),alreadyDone=completedMissions.includes(currentRegion);document.getElementById('brainScore').textContent=String(score).padStart(2,'0');document.querySelectorAll('.quest-orbs i').forEach((orb,index)=>orb.classList.toggle('done',index<complete));document.getElementById('missionNumber').textContent=complete>=3?'QUEST COMPLETE':`MISSION ${Math.min(complete+1,3)} OF 3`;document.getElementById('missionText').textContent=complete>=3?'You made room for your brain today. Nice work.':brainRegions[currentRegion].mission;document.getElementById('questStatus').textContent=complete>=3?'Level complete · keep the small wins':alreadyDone?'Mission complete · choose another zone':'Tap “I did it” after your real-life mission';button.disabled=complete>=3||alreadyDone;button.innerHTML=complete>=3?'Complete ✓':alreadyDone?'Done ✓':'I did it <span>+ balance</span>'};
+const setBrainRegion=region=>{currentRegion=region;const item=brainRegions[region];document.querySelectorAll('.brain-region').forEach(el=>el.classList.toggle('active',el.dataset.region===region));document.getElementById('brainIcon').textContent=item.icon;document.getElementById('brainTag').textContent=item.tag;document.getElementById('brainTitle').textContent=item.title;document.getElementById('brainText').textContent=`${item.text} ${item.mission}`;updateQuest()};
+const setBrainHours=hours=>{selectedHours=hours;const state=brainStates[hours];document.querySelectorAll('.time-option').forEach(button=>{const on=+button.dataset.hours===hours;button.classList.toggle('active',on);button.setAttribute('aria-pressed',on)});document.getElementById('brainHours').textContent=state.hours;document.getElementById('brainMeter').style.width=state.meter;document.getElementById('brainLevel').textContent=state.level;setBrainRegion(state.region)};
+document.querySelectorAll('.time-option').forEach(button=>button.addEventListener('click',()=>setBrainHours(+button.dataset.hours)));
+document.querySelectorAll('.brain-region').forEach(region=>{region.addEventListener('click',()=>setBrainRegion(region.dataset.region));region.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();setBrainRegion(region.dataset.region)}})});
+document.getElementById('missionDone').addEventListener('click',()=>{if(!completedMissions.includes(currentRegion)&&completedMissions.length<3){completedMissions.push(currentRegion);updateQuest()}});
+document.getElementById('brainReset').addEventListener('click',()=>{completedMissions=[];setBrainHours(5)});
+updateQuest();
 
-// ---------- pledge modal + certificate ----------
-const modal = document.getElementById('pledgeModal');
-function openModal(){ modal.classList.add('open'); modal.setAttribute('aria-hidden', 'false'); }
-function closeModal(){ modal.classList.remove('open'); modal.setAttribute('aria-hidden', 'true'); }
-document.getElementById('openPledge')?.addEventListener('click', openModal);
-modal?.querySelector('.modal-close').addEventListener('click', closeModal);
-modal?.addEventListener('click', e => { if (e.target === modal) closeModal(); });
-
-// auto popup once when scrolled to bottom
-let popped = false;
-addEventListener('scroll', () => {
-  if (!popped && innerHeight + scrollY >= document.body.offsetHeight - 40){
-    popped = true; openModal();
-  }
-});
-
-const certLogo = new Image();
-certLogo.src = 'assets/image41.webp';   // കുട്ടിക്കളിയല്ല സോഷ്യൽ മീഡിയ logo
-
-document.getElementById('pledgeForm')?.addEventListener('submit', async e => {
-  e.preventDefault();
-  const name = document.getElementById('pledgeName').value.trim() || 'Friend';
-  const cv = document.getElementById('certCanvas');
-  const ctx = cv.getContext('2d');
-  // make sure brand font is ready before drawing to canvas
-  try { await document.fonts.load('700 30px "Baloo Chettan 2"'); } catch (_) {}
-
-  // ---- light theme background ----
-  ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 1000, 700);
-  ctx.fillStyle = '#f6f7f9'; ctx.fillRect(40, 40, 920, 620);
-  ctx.strokeStyle = '#e8192c'; ctx.lineWidth = 8; ctx.strokeRect(24, 24, 952, 652);
-  ctx.textAlign = 'center';
-
-  // campaign logo (smaller: 260px wide, top-centered)
-  let textY = 250;
-  if (certLogo.complete && certLogo.naturalWidth){
-    const w = 260, h = w * (certLogo.naturalHeight / certLogo.naturalWidth);
-    ctx.drawImage(certLogo, 500 - w / 2, 80, w, h);
-    textY = 80 + h + 60;
-  }
-  ctx.fillStyle = '#5b626e'; ctx.font = '22px Inter, sans-serif';
-  ctx.fillText('This certifies that', 500, textY);
-  ctx.fillStyle = '#16181d'; ctx.font = 'bold 52px Inter, sans-serif';
-  ctx.fillText(name, 500, textY + 70);
-  ctx.fillStyle = '#3a4150'; ctx.font = '20px Inter, sans-serif';
-  ctx.fillText('has pledged to use social media responsibly and to', 500, textY + 135);
-  ctx.fillText('protect children from unregulated access.', 500, textY + 170);
-  ctx.fillStyle = '#e8192c'; ctx.font = '700 28px "Baloo Chettan 2", sans-serif';
-  ctx.fillText('WISDOM STUDENTS', 500, 618);
-
-  // trigger download directly
-  const a = document.createElement('a');
-  a.download = 'pledge-certificate.png';
-  a.href = cv.toDataURL('image/png');
-  a.click();
-});
-
-// ---------- back to top ----------
-const toTop = document.getElementById('toTop');
-addEventListener('scroll', () => { toTop.classList.toggle('show', scrollY > 600); });
-toTop.addEventListener('click', () => scrollTo({ top: 0, behavior: 'smooth' }));
-
-// ---------- active nav highlight ----------
-const navlinks = [...document.querySelectorAll('.links a')];
-const map = {};
-navlinks.forEach(a => map[a.getAttribute('href').slice(1)] = a);
-const obs = new IntersectionObserver(entries => {
-  entries.forEach(en => {
-    const a = map[en.target.id];
-    if (a && en.isIntersecting){
-      navlinks.forEach(x => x.style.color = '');
-      a.style.color = 'var(--red)';
-    }
-  });
-}, { rootMargin: '-45% 0px -50% 0px' });
-document.querySelectorAll('section[id]').forEach(s => obs.observe(s));
+document.querySelectorAll('.notice').forEach(notice=>notice.addEventListener('click',()=>{
+  const snoozed=notice.classList.toggle('snoozed');
+  notice.setAttribute('aria-pressed',snoozed);
+  notice.title=snoozed?'Notification paused':'Pause this notification';
+}));
