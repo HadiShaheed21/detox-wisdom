@@ -1,0 +1,13 @@
+/* Shared type foundation: English/UI uses Manrope; Malayalam uses Noto Sans Malayalam. */
+:root{--sans:"Manrope",sans-serif;--mal:"Noto Sans Malayalam",sans-serif}body,button,input,textarea,select{font-family:var(--sans)}
+
+/* English hierarchy */
+h1,h2,h3,h4,h5,h6,.nav-links a,.nav-cta,.button,.text-link,.tool-action,.gallery-filter,.gallery-more{font-family:var(--sans)}h1,h2,h3,h4,h5,h6{font-weight:700}.hero-text,.intro,.section-head>p,.journey-title p,.gallery-head>p,.toolkit-heading>p:last-child,.lab-intro>p:last-of-type,.check-copy>p:not(.eyebrow),.brain-balance-copy>p:not(.eyebrow){font-weight:500;line-height:1.8}.nav-links a{font-weight:600;letter-spacing:-.015em}.nav-cta,.button,.text-link,.tool-action,.gallery-filter,.gallery-more{font-weight:700}.eyebrow,.section-label,.card-top,.quiz-status,.quiz-type,.screen-time-picker>span,.brain-meter>span,.brain-info p,.game-top,.quest-mission span{font-weight:600}
+
+/* Malayalam hierarchy */
+[lang="ml"],.language{font-family:var(--mal);letter-spacing:0;word-spacing:0}.hero h1[lang="ml"]{font-family:var(--mal);font-size:clamp(60px,5vw,68px);font-weight:700;line-height:1.28;letter-spacing:-.045em}.hero h1[lang="ml"] em{font-style:normal}.quiz-card h3,[lang="ml"].quiz-title{font-family:var(--mal);font-weight:700;line-height:1.5;letter-spacing:-.025em}.answers button span[lang="ml"]{font-family:var(--mal);font-size:17px;font-weight:600;line-height:1.65;letter-spacing:0}.snapshot p[lang="ml"],.result-tip small[lang="ml"]{font-family:var(--mal);font-size:15px;font-weight:500;line-height:1.75;letter-spacing:0}
+
+/* Keep English titles precise after the legacy hero selector applies Malayalam styling. */
+.final-cta h2{font-family:var(--sans);font-weight:800;letter-spacing:-.065em;line-height:1.06}.brain-balance h2,.toolkit h2,.reset-lab h2,.check-section h2,.gallery-head h2{font-family:var(--sans);font-weight:800;letter-spacing:-.065em;line-height:1.06}.quiz-card h3 small{font-family:var(--sans);font-weight:500}
+
+@media(max-width:800px){.hero h1[lang="ml"]{font-size:clamp(40px,11vw,46px);line-height:1.35;letter-spacing:-.035em}.answers button span[lang="ml"]{font-size:16px;line-height:1.6}.quiz-card h3{font-size:clamp(28px,7vw,32px);line-height:1.5}}
