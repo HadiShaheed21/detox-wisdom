@@ -1,0 +1,27 @@
+/* Shared accessibility and theme layer. Loaded last so it can safely normalize
+   the existing component styles without changing their layout. */
+:root{color-scheme:light}
+html{scroll-padding-top:96px}
+.skip-link{position:fixed;z-index:100;top:12px;left:12px;padding:10px 14px;border-radius:8px;background:#17181b;color:#fff;font:700 12px var(--sans);text-decoration:none;transform:translateY(-160%);transition:transform .2s}
+.skip-link:focus{transform:translateY(0);outline:3px solid #f4b400;outline-offset:3px}
+:where(a,button,[role="button"],.brain-region):focus-visible{outline:3px solid #0d7fe8;outline-offset:3px}
+button:disabled{cursor:default;opacity:.72}
+.tool-action:disabled{pointer-events:none}
+.coming-soon{padding:0;border:0;background:transparent;text-align:left;font-family:inherit;cursor:pointer}.research button{color:#fff}.research button:hover .read-image,.research button:focus-visible .read-image{transform:scale(.97)}
+.gallery-item:focus-visible:after,.gallery-item:focus-visible span{opacity:1}.gallery-item:focus-visible img{transform:scale(1.07)}
+.night-mode{--cream:#202126;--ink:#f5f1e9;--muted:#c2beb7;--line:rgba(255,255,255,.18);background:#202126;color:#f5f1e9}
+.night-mode .nav{background:rgba(32,33,38,.78);border-color:rgba(255,255,255,.18)}
+.night-mode .nav a,.night-mode .icon-btn,.night-mode .language{color:#f5f1e9}
+.night-mode .hero{background-color:#202126;background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px)}
+.night-mode .hero:after{background:linear-gradient(transparent,#202126)}
+.night-mode .hero-text,.night-mode .eyebrow,.night-mode .eyebrow.dark,.night-mode .section-head>p,.night-mode .journey-title p{color:#c8c3bb}
+.night-mode .impact,.night-mode .journey,.night-mode .stories{background:#202126}
+.night-mode .bento-section{background:#303137}.night-mode .bento-card.reset{background:#ece5d8;color:#202126}
+.night-mode .check-section{background:#191a1e}
+.night-mode .toolkit{background:#2c2d32}.night-mode .tool-card{background:#35363c;border-color:#56575e;color:#f5f1e9}.night-mode .tool-card p,.night-mode .tool-card span{color:#d0cbc4}.night-mode .tool-icon{background:#4a4b52;color:#fff}.night-mode .tool-action{color:#f5f1e9}.night-mode .active-tool{background:#202126;border-color:#f4b400}
+.night-mode .reset-lab{background:#38383e}.night-mode .lab-window{background:#f3efe7;color:#202126}.night-mode .lab-reflection{background:#24252a}.night-mode .mode-switch{background:#4a4a50;border-color:#67676d}.night-mode .mode{color:#ece8e1}.night-mode .mode.active{background:#f5f1e9;color:#202126}
+.night-mode .pulse{background:#263e2c}.night-mode .pulse-copy>p:not(.eyebrow){color:#c0d8c4}.night-mode .gallery{background:#2b2c31}.night-mode .gallery-head>p{color:#d0cbc4}.night-mode .gallery-filter{border-color:#74736d;color:#eee9e0}.night-mode .gallery-filter:hover,.night-mode .gallery-filter.active{background:#f5f1e9;border-color:#f5f1e9;color:#202126}.night-mode .gallery-more{border-color:#f5f1e9;color:#f5f1e9}
+.night-mode .final-cta{background:#3b3432}.night-mode .final-cta .eyebrow,.night-mode .final-cta>p:not(.eyebrow){color:#dfd6cc}
+.night-mode .footer-partner{box-shadow:0 7px 20px rgba(0,0,0,.45)}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}.cursor-glow{display:none}}
+@media(max-width:800px){.cursor-glow{display:none}.night-mode .footer-meta{color:#f5f1e9}}
