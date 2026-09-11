@@ -1,0 +1,2 @@
+/* The feed and notifications are light UI surfaces in both themes. */
+.phone-stage .notice{color:#202126!important;background:#fffffff2!important;opacity:1}.phone-stage .notice p,.phone-stage .notice p b{color:#202126!important;font-weight:500;text-shadow:none!important}.phone-stage .notice p b{font-weight:800}.phone-stage .notice time{color:#62605c!important;text-shadow:none!important}.phone-stage .screen{color:#18181b}.phone-stage .screen :is(.screen-header,.tiny-title,.feed-meta,.feed-tabs){color:#18181b!important}
