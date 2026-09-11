@@ -19,3 +19,6 @@ body.malayalam :is(h1,h2,h3,.hero-text,.pressure .intro,.check-copy>p:not(.eyebr
 @media(max-width:800px){.nav-actions .language{display:inline-flex!important;align-items:center;justify-content:center;min-height:36px;padding:0 8px;border:1px solid var(--line);border-radius:10px;font-family:var(--mal);font-size:10px;font-weight:700;white-space:nowrap}.nav-actions{gap:6px}.night-mode .nav-actions .language{border-color:rgba(255,255,255,.25)}}
 @media(max-width:450px){.nav-actions .language{min-height:34px;padding:0 7px;font-size:9px}.nav-actions{gap:4px}}
 @media(max-width:360px){.hero h1[lang="ml"]{font-size:30px}.hero h1[lang="ml"] em{font-size:.8em}}
+
+/* Malayalam Journey heading: controlled line breaks keep the long phrase inside mobile screens. */
+@media(max-width:800px){body.malayalam .journey-title h2{max-width:100%;font-size:clamp(32px,9vw,38px);line-height:1.42;letter-spacing:-.015em;overflow-wrap:anywhere}body.malayalam .journey-title h2 em{display:inline;color:var(--red)}body.malayalam .journey-title p{font-size:16px;line-height:1.9;letter-spacing:0;max-width:100%}}
